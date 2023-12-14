@@ -4,7 +4,7 @@ import nftContractABI from './component/abi/nftContract.json';
 import './App.css';
 
 // ここにNFTスマートコントラクトのアドレスとABIを設定します
-const nftContractAddress = '0xb6253Df1a81F5f7d79B687a1108BCE15e0a4fe28';
+const nftContractAddress = '0x666dA5F2FCDA493b02bD8B2F34A6422Fdfc533c8';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
