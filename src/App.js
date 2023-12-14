@@ -4,7 +4,7 @@ import nftContractABI from './component/abi/nftContract.json';
 import './App.css';
 
 // ここにNFTスマートコントラクトのアドレスとABIを設定します
-const nftContractAddress = '0x97Dc1061edf4f7b86b8cB9Ed6997c9942E8c647A';
+const nftContractAddress = '0xb6253Df1a81F5f7d79B687a1108BCE15e0a4fe28';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
@@ -57,7 +57,7 @@ function App() {
       for (let i = 1; i <= totalTokenIDs; i++) {
         const balance = await contract.balanceOf(userAddress, i);
         const intBalance = balance.toNumber();
-        console.log(intBalance);
+        console.log(`tokenID ${i} : ${intBalance}`);
         TotalBalance += intBalance;
       }
       console.log(TotalBalance);
