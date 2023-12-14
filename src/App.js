@@ -4,7 +4,7 @@ import nftContractABI from './component/abi/nftContract.json';
 import './App.css';
 
 // ここにNFTスマートコントラクトのアドレスとABIを設定します
-const nftContractAddress = '0x62137c044e65D50E8f3d6512A69488FF5C62a7A7';
+const nftContractAddress = '0x97Dc1061edf4f7b86b8cB9Ed6997c9942E8c647A';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
@@ -26,15 +26,46 @@ function App() {
     }
   };
 
+  const getMaxTokenID = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const contract = new ethers.Contract(nftContractAddress, nftContractABI, provider);
+
+      const totalSupply = await contract.getAllTokenIds();
+      const maxTokenID = totalSupply.toNumber()
+
+      return maxTokenID;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+
   const checkNFTOwnership = async (userAddress) => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const contract = new ethers.Contract(nftContractAddress, nftContractABI, provider);
-      
-      // ここでNFTの所有権を確認します。NFTスマートコントラクトによっては、メソッド名が異なる場合があります。
-      const balance = await contract.balanceOf(userAddress,2);
-      if (balance > 0) setNftOwned(true);
-      setNftOwned(balance.gt(0));
+
+      const totalTokenIDs = await getMaxTokenID();
+      if (totalTokenIDs === null) {
+        console.error("Failed to retrieve total token IDs.");
+        return;
+      }
+
+      let TotalBalance = 0;
+      for (let i = 1; i <= totalTokenIDs; i++) {
+        const balance = await contract.balanceOf(userAddress, i);
+        const intBalance = balance.toNumber();
+        console.log(intBalance);
+        TotalBalance += intBalance;
+      }
+      console.log(TotalBalance);
+      if (TotalBalance > 0) {
+        setNftOwned(true);
+      } else {
+        setNftOwned(false);
+      }
     } catch (error) {
       console.error(error);
     }
